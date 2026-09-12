@@ -26,13 +26,55 @@ def draw():
     for answer_box in answer_boxes:
         screen.draw.filled_rect(answer_box,"pink")
 
+    
+
 def update():
     marquee_box.x -= 2
     if marquee_box.right<0:
         marquee_box.left = W
+
+question_file_name="/Users/manishraghav/Desktop/python programing/game dev 1/quiz master/question.txt"
+questions=[]
+question_count=0
+question_index = 0
 def game_over():
     global time_left
     time_left=0
+
+def read_question_file():
+    global questions
+    global question_count
+    q_file=open(question_file_name,"r")
+    for question in q_file:
+        questions.append(question)
+        question_count += 1
+    q_file.close()
+
+def read_next_question():
+    global question_index 
+    question_index += 1
+    return question.pop(0).split("|")
+
+def on_mouse_down(pos):
+    index = 1
+    for box in answer_boxes:
+        if box.collidepoint(pos):
+            if index == int(question[5]):
+                correct_anwser()
+            else:
+                game_over()
+        index += 1
+    if skip_box.collidepoint(pos):
+        skip_question()
+
+def correct_anwser():
+    pass
+
+def skip_question():
+    pass
+
+
+
 def update_time():
     global time_left
     if time_left>0:
@@ -40,7 +82,8 @@ def update_time():
     else:
         game_over()
 
-
+read_question_file()
+question = read_next_question()
 clock.schedule_interval(update_time,1)
 
 
